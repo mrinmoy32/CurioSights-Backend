@@ -48,15 +48,31 @@ router.get('/:placeId', (req, res, next)=>{
     const place = DUMMY_PLACES.find(p => {
      return p.id === placeId
     });
+
+    if(!place){
+      // return res.status(404).json({message: "Could not find a place for the provided placeId"})
+      const error = new Error("Could not find a place for the provided placeId");
+      error.code = 404;
+      throw error;
+    }
     //The json() method below takes any data that can converted to a json. 
     //e.g. object, array, number, string, boolean
     res.json({place}); //In js {place} == {place: place}
 });
+
+//In below route we are adding user befor :userId to make it different from the :placeId
 router.get('/user/:userId', (req, res, next)=>{
     const userId = req.params.userId; //params provided by express gives us the placeId from req url
     const userPlace = DUMMY_PLACES.find(u => {
       return u.creator === userId
     });
+
+    if(!userPlace){
+      // return res.status(404).json({message: "Could not find a place for the provided userId"})
+      const error = new Error("Could not find a place for the provided placeId");
+      error.code = 404;
+      return next(error);
+    }
     
     res.json({userPlace}); //In js {userPlace} == {userPlace: userPlace}
 });
