@@ -8,7 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Using the placesRoutes middleware in the application
-app.use(placesRoutes);
+// the use method only passess requests with starting URL of /api/places/.......
+app.use('/api/places', placesRoutes);
 
 // Start the server
 app.listen(PORT, () => {
