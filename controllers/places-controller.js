@@ -50,7 +50,7 @@ const DUMMY_PLACES = [
       lat: 27.1751,
       lan: 78.0421,
     },
-    imageUrl: "https://www.google.com/imgres?imgurl=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F07%2F29%2F22%2F56%2Ftaj-mahal-866692_1280.jpg&tbnid=Z1skdvR4iyc9cM&vet=12ahUKEwjIm4D4uriAAxWRoekKHYhCCUoQMygEegUIARD9AQ..i&imgrefurl=https%3A%2F%2Fpixabay.com%2Fimages%2Fsearch%2Ftaj%2520mahal%2F&docid=lnmoyvbzBy3ObM&w=1280&h=825&q=tajmahal%20imgaes&ved=2ahUKEwjIm4D4uriAAxWRoekKHYhCCUoQMygEegUIARD9AQ",
+    imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFqJTIwbWFoYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
     address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
     creator: "u2",
   },
