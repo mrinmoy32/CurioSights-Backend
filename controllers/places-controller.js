@@ -1,50 +1,64 @@
+const { v4: uuidv4 } = require('uuid');
 const HttpError = require("../models/http-error");
 
+
 const DUMMY_PLACES = [
-    {
-      id: "p1",
-      title: "Tirupati Balaji Temple",
-      description: "Most visited indian temple",
-      imageUrl:
-        "https://blog.thomascook.in/wp-content/uploads/2019/11/tirupati-balaji-temple.jpg.jpg",
-      address: "Tirumala, Tirupati, Andhra Pradesh 517501",
-      location: {
-        lat: 13.683272,
-        lng: 79.347245,
-      },
-      creator: "u1",
+  {
+    id: "p1",
+    title: "Tirupati Balaji Temple",
+    description: "Most visited indian temple",
+    imageUrl:
+      "https://blog.thomascook.in/wp-content/uploads/2019/11/tirupati-balaji-temple.jpg.jpg",
+    address: "Tirumala, Tirupati, Andhra Pradesh 517501",
+    location: {
+      lat: 13.683272,
+      lng: 79.347245,
     },
-    {
-      id: "p2",
-      title: "The Great Wall of China",
-      description: "One of the wonders of the world",
-      imageUrl:
-        "https://images.nationalgeographic.org/image/upload/t_edhub_resource_key_image/v1638892506/EducationHub/photos/the-great-wall-of-china.jpg",
-      address: "Jiankou, Huairou District, China",
-      location: {
-        lat: 40.431908,
-        lng: 116.565291,
-      },
-      creator: "u2",
+    creator: "u1",
+  },
+  {
+    id: "p2",
+    title: "The Great Wall of China",
+    description: "One of the wonders of the world",
+    imageUrl:
+      "https://images.nationalgeographic.org/image/upload/t_edhub_resource_key_image/v1638892506/EducationHub/photos/the-great-wall-of-china.jpg",
+    address: "Jiankou, Huairou District, China",
+    location: {
+      lat: 40.431908,
+      lng: 116.565291,
     },
-    {
-      id: "p3",
-      title: "Machu Picchu",
-      description: "Ancient Inca city in the Andes",
-      imageUrl:
-        "https://cms.valenciatravelcusco.com/media/images/package/sacred-valley-and-machu-picchu-by-train_Z4e2XgX.jpg",
-      address: "Machu Picchu, Aguas Calientes, Peru",
-      location: {
-        lat: -13.163141,
-        lng: -72.545872,
-      },
-      creator: "u1",
+    creator: "u2",
+  },
+  {
+    id: "p3",
+    title: "Machu Picchu",
+    description: "Ancient Inca city in the Andes",
+    imageUrl:
+      "https://cms.valenciatravelcusco.com/media/images/package/sacred-valley-and-machu-picchu-by-train_Z4e2XgX.jpg",
+    address: "Machu Picchu, Aguas Calientes, Peru",
+    location: {
+      lat: -13.163141,
+      lng: -72.545872,
     },
-  ];
+    creator: "u1",
+  },
+  {
+    id: "p4",
+    title: "TajMahal",
+    description: "One of the 7 world wonders",
+    coordinates: {
+      lat: 27.1751,
+      lan: 78.0421,
+    },
+    imageUrl: "https://www.google.com/imgres?imgurl=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F07%2F29%2F22%2F56%2Ftaj-mahal-866692_1280.jpg&tbnid=Z1skdvR4iyc9cM&vet=12ahUKEwjIm4D4uriAAxWRoekKHYhCCUoQMygEegUIARD9AQ..i&imgrefurl=https%3A%2F%2Fpixabay.com%2Fimages%2Fsearch%2Ftaj%2520mahal%2F&docid=lnmoyvbzBy3ObM&w=1280&h=825&q=tajmahal%20imgaes&ved=2ahUKEwjIm4D4uriAAxWRoekKHYhCCUoQMygEegUIARD9AQ",
+    address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
+    creator: "u2",
+  },
+];
 
 const getPlaceById = (req, res, next) => {
-    const placeId = req.params.placeId; //params provided by express gives us the placeId from req url
-  const place = DUMMY_PLACES.find((p) => {
+  const placeId = req.params.placeId; //params provided by express gives us the placeId from req url
+  const place = DUMMY_PLACES.filter((p) => {
     return p.id === placeId;
   });
 
@@ -58,22 +72,41 @@ const getPlaceById = (req, res, next) => {
 };
 
 const getPlaceByUserId = (req, res, next) => {
-    const userId = req.params.userId; //params provided by express gives us the placeId from req url
-    const userPlace = DUMMY_PLACES.find((u) => {
-      return u.creator === userId;
-    });
-  
-    if (!userPlace) {
-      // return res.status(404).json({message: "Could not find a place for the provided userId"})
-      const error = new Error("Could not find a place for the provided placeId");
-      error.code = 404;
-      return next(
-        new HttpError("Could not find a place for the provided placeId", 404)
-      );
-    }
-  
-    res.json({ userPlace }); //In js {userPlace} == {userPlace: userPlace}
-}
+  const userId = req.params.userId; //params provided by express gives us the placeId from req url
+  const userPlace = DUMMY_PLACES.filter((u) => {
+    return u.creator === userId;
+  });
+
+  if (!userPlace) {
+    // return res.status(404).json({message: "Could not find a place for the provided userId"})
+    const error = new Error("Could not find a place for the provided placeId");
+    error.code = 404;
+    return next(
+      new HttpError("Could not find a place for the provided placeId", 404)
+    );
+  }
+
+  res.json({ userPlace }); //In js {userPlace} == {userPlace: userPlace}
+};
+
+const createPlace = (req, res, next) => {
+  const { title, description, coordinates, address, creator } = req.body;
+  const placeId = uuidv4();
+  //creating a obj literal. below for every prop like title it means title:title as the names are same
+  //for location name is differnet so we are using coordinates as value.
+  const createdPlace = {
+    id: placeId,
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
+  DUMMY_PLACES.push(createdPlace);
+
+  res.status(201).json({ message: "New Place Created", place: createdPlace });
+};
 
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
+exports.createPlace = createPlace;
