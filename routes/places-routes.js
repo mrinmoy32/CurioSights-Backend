@@ -9,4 +9,6 @@ router.get("/:placeId", placesControllers.getPlaceById);
 //In below route we are adding user befor :userId to make it different from the :placeId
 router.get("/user/:userId", placesControllers.getPlaceByUserId);
 
+router.post('/', placesControllers.createPlace);
+
 module.exports = router;
