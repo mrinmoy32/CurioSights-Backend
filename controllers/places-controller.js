@@ -1,6 +1,5 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const HttpError = require("../models/http-error");
-
 
 const DUMMY_PLACES = [
   {
@@ -50,7 +49,8 @@ const DUMMY_PLACES = [
       lat: 27.1751,
       lan: 78.0421,
     },
-    imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFqJTIwbWFoYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
+    imageUrl:
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFqJTIwbWFoYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
     address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
     creator: "u2",
   },
@@ -107,6 +107,25 @@ const createPlace = (req, res, next) => {
   res.status(201).json({ message: "New Place Created", place: createdPlace });
 };
 
+const updatePlace = (req, res, next) => {
+  const { title, description } = req.body;
+  const placeId = req.params.placeId; 
+ const  updatedPlace ={ ...DUMMY_PLACES.find(p => p.id === placeId)}; //creating a copy of updatedPlace 
+  //this creates a copy of all key value pairs of the old objects and as key value pairs in the new objecr
+  //updating in immutable way
+  const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+  DUMMY_PLACES[placeIndex] = updatedPlace;
+
+  res.status(200).json({updatedPlace});
+
+};
+
+const deletePlace = (req, res, next) => {};
+
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
 exports.createPlace = createPlace;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;
