@@ -1,8 +1,7 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const HttpError = require("../models/http-error");
 
-
-const DUMMY_PLACES = [
+let DUMMY_PLACES = [
   {
     id: "p1",
     title: "Tirupati Balaji Temple",
@@ -50,7 +49,8 @@ const DUMMY_PLACES = [
       lat: 27.1751,
       lan: 78.0421,
     },
-    imageUrl: "https://www.google.com/imgres?imgurl=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F07%2F29%2F22%2F56%2Ftaj-mahal-866692_1280.jpg&tbnid=Z1skdvR4iyc9cM&vet=12ahUKEwjIm4D4uriAAxWRoekKHYhCCUoQMygEegUIARD9AQ..i&imgrefurl=https%3A%2F%2Fpixabay.com%2Fimages%2Fsearch%2Ftaj%2520mahal%2F&docid=lnmoyvbzBy3ObM&w=1280&h=825&q=tajmahal%20imgaes&ved=2ahUKEwjIm4D4uriAAxWRoekKHYhCCUoQMygEegUIARD9AQ",
+    imageUrl:
+      "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFqJTIwbWFoYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
     address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
     creator: "u2",
   },
@@ -62,7 +62,10 @@ const getPlaceById = (req, res, next) => {
     return p.id === placeId;
   });
 
-  if (!place) {
+  //empty object is not falsy value in JavaScript
+  //The only falsy values in JS are 0, false, null, undefined, empty string, and NaN.
+  if (!Object.keys(place).length) {
+    //checks the length of place object
     // return res.status(404).json({message: "Could not find a place for the provided placeId"})
     throw new HttpError("Could not find a place for the provided placeId", 404);
   }
@@ -77,12 +80,13 @@ const getPlaceByUserId = (req, res, next) => {
     return u.creator === userId;
   });
 
-  if (!userPlace) {
+  if (!Object.keys(userPlace).length) {
+    //checks the length of userPlace object
     // return res.status(404).json({message: "Could not find a place for the provided userId"})
-    const error = new Error("Could not find a place for the provided placeId");
-    error.code = 404;
+    // const error = new Error("Could not find a place for the provided userId");
+    // error.code = 404;
     return next(
-      new HttpError("Could not find a place for the provided placeId", 404)
+      new HttpError("Could not find a place for the provided userId", 404)
     );
   }
 
@@ -107,6 +111,30 @@ const createPlace = (req, res, next) => {
   res.status(201).json({ message: "New Place Created", place: createdPlace });
 };
 
+const updatePlace = (req, res, next) => {
+  const { title, description } = req.body;
+  const placeId = req.params.placeId;
+  const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) }; //creating a copy of updatedPlace
+  //this creates a copy of all key value pairs of the old objects and as key value pairs in the new objecr
+  //updating in immutable way
+  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+  DUMMY_PLACES[placeIndex] = updatedPlace;
+
+  res.status(200).json({ updatedPlace });
+};
+
+const deletePlace = (req, res, next) => {
+  const placeId = req.params.placeId;
+  const deletedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
+  DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+  res.status(200);
+  res.json({ message: "successfully deleted place", deletedPlace });
+};
+
 exports.getPlaceById = getPlaceById;
 exports.getPlaceByUserId = getPlaceByUserId;
 exports.createPlace = createPlace;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;
