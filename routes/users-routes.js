@@ -1,12 +1,12 @@
 const express = require("express");
 const HttpError = require("../models/http-error");
-const usersController = require('../controllers/users-controller');
+const usersControllers = require('../controllers/users-controllers');
 
 const router = express.Router();
 
-router.get("/", usersController.getUsers);
-router.post('/signup', usersController.signup);
-router.post('/login', usersController.login);
+router.get("/", usersControllers.getUsers);
+router.post('/signup', usersControllers.signup);
+router.post('/login', usersControllers.login);
 
 
 module.exports = router;

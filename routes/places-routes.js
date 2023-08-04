@@ -1,16 +1,16 @@
 const express = require("express");
 const HttpError = require("../models/http-error");
-const placesController = require('../controllers/places-controller');
+const placesControllers = require('../controllers/places-controllers');
 
 const router = express.Router();
 
-router.get("/:placeId", placesController.getPlaceById);
+router.get("/:placeId", placesControllers.getPlaceById);
 
 //In below route we are adding user befor :userId to make it different from the :placeId
-router.get("/user/:userId", placesController.getPlacesByUserId);
+router.get("/user/:userId", placesControllers.getPlacesByUserId);
 
-router.post('/', placesController.createPlace);
-router.patch('/:placeId', placesController.updatePlace);
-router.delete('/:placeId', placesController.deletePlace);
+router.post('/', placesControllers.createPlace);
+router.patch('/:placeId', placesControllers.updatePlace);
+router.delete('/:placeId', placesControllers.deletePlace);
 
 module.exports = router;
