@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const {validationResult} = require("express-validator")
 const HttpError = require("../models/http-error");
 
 let DUMMY_PLACES = [
@@ -94,6 +95,13 @@ const getPlacesByUserId = (req, res, next) => {
 };
 
 const createPlace = (req, res, next) => {
+  
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    // res.status(422).json(errors)
+    throw new HttpError("Invalid inputs from user, please check your data", 422)
+  }
+
   const { title, description, coordinates, address, creator } = req.body;
   const placeId = uuidv4();
   //creating a obj literal. below for every prop like title it means title:title as the names are same
@@ -112,6 +120,12 @@ const createPlace = (req, res, next) => {
 };
 
 const updatePlace = (req, res, next) => {
+
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    throw new HttpError("Invalid inputs from user, please check your data", 422)
+  }
+
   const { title, description } = req.body;
   const placeId = req.params.placeId;
   const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) }; //creating a copy of updatedPlace
