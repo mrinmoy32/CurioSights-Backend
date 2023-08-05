@@ -4,6 +4,7 @@ const HttpError = require('./models/http-error')
 
 //Importing placesRoutes middleware
 const placesRoutes = require('./routes/places-routes');
+const usersRoutes = require('./routes/users-routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 // Using the placesRoutes middleware in the application
 // the use method only passess requests with starting URL of /api/places/.......
 app.use('/api/places', placesRoutes);
+app.use('/api/users', usersRoutes);
 
 //Handling errors for unsupproted routes
 app.use((req, res, next) => {

@@ -74,23 +74,23 @@ const getPlaceById = (req, res, next) => {
   res.json({ place }); //In js {place} == {place: place}
 };
 
-const getPlaceByUserId = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
   const userId = req.params.userId; //params provided by express gives us the placeId from req url
-  const userPlace = DUMMY_PLACES.filter((u) => {
+  const userPlaces = DUMMY_PLACES.filter((u) => {
     return u.creator === userId;
   });
 
-  if (!Object.keys(userPlace).length) {
+  if (!Object.keys(userPlaces).length) {
     //checks the length of userPlace object
     // return res.status(404).json({message: "Could not find a place for the provided userId"})
     // const error = new Error("Could not find a place for the provided userId");
     // error.code = 404;
     return next(
-      new HttpError("Could not find a place for the provided userId", 404)
+      new HttpError("Could not find places for the provided userId", 404)
     );
   }
 
-  res.json({ userPlace }); //In js {userPlace} == {userPlace: userPlace}
+  res.json({ userPlaces }); //In js {userPlace} == {userPlace: userPlace}
 };
 
 const createPlace = (req, res, next) => {
@@ -134,7 +134,7 @@ const deletePlace = (req, res, next) => {
 };
 
 exports.getPlaceById = getPlaceById;
-exports.getPlaceByUserId = getPlaceByUserId;
+exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
 exports.updatePlace = updatePlace;
 exports.deletePlace = deletePlace;
