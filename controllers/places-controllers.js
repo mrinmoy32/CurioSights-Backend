@@ -1,7 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const Place = require("../models/places");
 const HttpError = require("../models/http-error");
-const getCoordsForAddress = require("./util/location")
+const getCoordsForAddress = require("./util/location");
 
 let DUMMY_PLACES = [
   {
@@ -110,23 +111,30 @@ const createPlace = async (req, res, next) => {
   //creating a obj literal. below for every prop like title it means title:title as the names are same
   //for location name is differnet so we are using coordinates as value.
 
-  //using getCoordsForAddress
-  let coordinates;
-  try {
-    coordinates = await getCoordsForAddress(address);
-  } catch (error) {
-    return next(error);
-  }
-
-  const createdPlace = {
-    id: placeId,
+  //using getCoordsForAddress BUT IT IS NOT WORKINGMAY BE DUE TO API
+  let coordinates= {lat: 27, lan: 30}; //Using dummy-coordinates
+  // try {
+  //   // coordinates = await getCoordsForAddress(address);
+  // } catch (error) {
+  //   return next(error);
+  // }
+  //using data model Place
+  const createdPlace = new Place({
+    // id: placeId,
     title,
     description,
     location: coordinates,
+    image:
+      "https://cms.valenciatravelcusco.com/media/images/package/sacred-valley-and-machu-picchu-by-train_Z4e2XgX.jpg",
     address,
     creator,
-  };
-  DUMMY_PLACES.push(createdPlace);
+  });
+  // DUMMY_PLACES.push(createdPlace);
+  try {
+    await createdPlace.save(); //save() will create a new doc in mongo collection, also its a promise
+  } catch (error) {
+    return next(new HttpError("Falied creating place, please try again", 500));
+  }
 
   res.status(201).json({ message: "New Place Created", place: createdPlace });
 };

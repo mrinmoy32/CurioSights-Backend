@@ -14,5 +14,7 @@ const placeSchema = new Schema({
     creator: {type: String, required: true},
 });
 
-module.exports = mongoose.model('Place', placeSchema); //covention is to keep 1st letter capital for 'Place'
+const Place = mongoose.model('Place', placeSchema); //covention is to keep 1st letter capital for 'Place'
 //and also it should be in singular number.
+
+module.exports = Place;
