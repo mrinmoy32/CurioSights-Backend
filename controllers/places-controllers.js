@@ -59,22 +59,28 @@ let DUMMY_PLACES = [
   },
 ];
 
-const getPlaceById = (req, res, next) => {
+const getPlaceById = async (req, res, next) => {
   const placeId = req.params.placeId; //params provided by express gives us the placeId from req url
-  const place = DUMMY_PLACES.filter((p) => {
-    return p.id === placeId;
-  });
-
+  let place;
+  try {
+    place = await Place.findById(placeId); //findById doesn't return a promise, we can use try-catch
+  } catch (error) {
+    return next(
+      new HttpError("Somthing went wrong, could not find a place", 500)
+    );
+  }
   //empty object is not falsy value in JavaScript
   //The only falsy values in JS are 0, false, null, undefined, empty string, and NaN.
   if (!Object.keys(place).length) {
     //checks the length of place object
     // return res.status(404).json({message: "Could not find a place for the provided placeId"})
-    throw new HttpError("Could not find a place for the provided placeId", 404);
+    return next(
+      new HttpError("Could not find a place for the provided placeId", 404)
+    );
   }
   //The json() method below takes any data that can converted to a json.
   //e.g. object, array, number, string, boolean
-  res.json({ place }); //In js {place} == {place: place}
+  res.json({ place: place.toObject({ getters: true }) }); //In js {place} == {place: place}
 };
 
 const getPlacesByUserId = (req, res, next) => {
@@ -107,12 +113,12 @@ const createPlace = async (req, res, next) => {
   }
 
   const { title, description, address, creator } = req.body;
-  const placeId = uuidv4();
+  // const placeId = uuidv4(); //not needed anyomore as DB will generate ID
   //creating a obj literal. below for every prop like title it means title:title as the names are same
   //for location name is differnet so we are using coordinates as value.
 
   //using getCoordsForAddress BUT IT IS NOT WORKINGMAY BE DUE TO API
-  let coordinates= {lat: 27, lan: 30}; //Using dummy-coordinates
+  let coordinates = { lat: 27, lan: 30 }; //Using dummy-coordinates
   // try {
   //   // coordinates = await getCoordsForAddress(address);
   // } catch (error) {

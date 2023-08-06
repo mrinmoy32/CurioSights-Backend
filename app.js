@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 //middleware for Error Handler
 app.use((error, req, res, next) => {
   if (res.headerSent) {
-    return next(error); //we can use "throw error" in syncronus
+    return next(error); //we can use "throw error" in synchronus
     //and use next(error) in both sychronous and asynchronous both cases
   }
   res.status(error.code || 500);
