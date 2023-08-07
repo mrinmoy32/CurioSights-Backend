@@ -80,14 +80,16 @@ const getPlaceById = async (req, res, next) => {
   }
   //The json() method below takes any data that can converted to a json.
   //e.g. object, array, number, string, boolean
-  res.json({ place: place.toObject({ getters: true }) }); //In js {place} == {place: place}
+  res.json({ place: place.toObject({ getters: true }) }); //toObject converts the mongoose object to JS
+  //object and getters: true remove the underscore (_) from id.
+  //In js {place} == {place: place}
 };
 
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.userId; //params provided by express gives us the placeId from req url
-  let places; 
+  let places;
   try {
-    places = await Place.find({creator: userId}); //findById doesn't return a promise, we can use try-catch
+    places = await Place.find({ creator: userId }); //findById doesn't return a promise, we can use try-catch
   } catch (error) {
     return next(
       new HttpError("Somthing went wrong, could not find a place", 500)
@@ -104,7 +106,7 @@ const getPlacesByUserId = async (req, res, next) => {
     );
   }
 
-  res.json({ places: places.map(p=>p.toObject({getters: true})) }); //In js {userPlace} == {userPlace: userPlace}
+  res.json({ places: places.map((p) => p.toObject({ getters: true })) }); //In js {userPlace} == {userPlace: userPlace}
 };
 
 const createPlace = async (req, res, next) => {
@@ -144,43 +146,77 @@ const createPlace = async (req, res, next) => {
   try {
     await createdPlace.save(); //save() will create a new doc in mongo collection, also its a promise
   } catch (error) {
-    return next(new HttpError("Falied creating place, please try again", 500));
+    return next(new HttpError("Failed creating place, please try again", 500));
   }
 
   res.status(201).json({ message: "New Place Created", place: createdPlace });
 };
 
-const updatePlace = (req, res, next) => {
+const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new HttpError(
-      "Invalid inputs from user, please check your data",
-      422
+    return next(
+      new HttpError("Invalid inputs from user, please check your data", 422)
     );
   }
 
   const { title, description } = req.body;
   const placeId = req.params.placeId;
-  const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) }; //creating a copy of updatedPlace
-  //this creates a copy of all key value pairs of the old objects and as key value pairs in the new objecr
-  //updating in immutable way
-  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  let updatedPlace;
+  try {
+    updatedPlace = await Place.findById(placeId);
+  } catch (error) {
+    return next(new HttpError("Failed updating place, please try again", 500));
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
-  DUMMY_PLACES[placeIndex] = updatedPlace;
 
-  res.status(200).json({ updatedPlace });
+  try {
+    await updatedPlace.save();
+  } catch (error) {
+    return next(
+      new HttpError("Failed storing the updated place, please try again", 500)
+    );
+  }
+
+  res
+    .status(200)
+    .json({ updatedPlace: updatedPlace.toObject({ getters: true }) });
 };
 
-const deletePlace = (req, res, next) => {
+const deletePlace = async (req, res, next) => {
   const placeId = req.params.placeId;
-  const deletedPlace = DUMMY_PLACES.find((p) => p.id === placeId);
-  if (!deletedPlace) {
-    throw new HttpError("could not find a place for that id", 404);
+  let deletedPlace;
+  try {
+    deletedPlace = await Place.findById(placeId);
+    console.log(deletedPlace)
+  } catch (error) {
+    return next(
+      new HttpError(
+        "Failed to find the place to be deleted, please try again",
+        500
+      )
+    );
   }
-  DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
-  res.status(200);
-  res.json({ message: "successfully deleted place", deletedPlace });
+
+  try {
+    await deletedPlace.deleteOne();
+  } catch (error) {
+    console.log('Received Error:' , error)
+    return next(
+      new HttpError("Failed to delete the place, please try again", 500)
+    );
+  }
+
+  // if (!deletedPlace) {
+  //   throw new HttpError("could not find a place for that id", 404);
+  // }
+  // DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+  res.status(200).json({
+    message: "successfully deleted place",
+    deletedPlace: deletedPlace.toObject({ getters: true }),
+  });
 };
 
 exports.getPlaceById = getPlaceById;
