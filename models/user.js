@@ -13,7 +13,7 @@ const userSchema = new Schema({
 
 userSchema.plugin(uniqueValidator);
 
-const User = mongoose.model('User', userSchema); //covention is to keep 1st letter capital for 'Place'
+const User = mongoose.model('User', userSchema); //covention is to keep 1st letter capital for 'User'
 //and also it should be in singular number.
 
 module.exports = User;
