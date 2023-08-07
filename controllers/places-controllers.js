@@ -83,14 +83,19 @@ const getPlaceById = async (req, res, next) => {
   res.json({ place: place.toObject({ getters: true }) }); //In js {place} == {place: place}
 };
 
-const getPlacesByUserId = (req, res, next) => {
+const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.userId; //params provided by express gives us the placeId from req url
-  const userPlaces = DUMMY_PLACES.filter((u) => {
-    return u.creator === userId;
-  });
+  let places; 
+  try {
+    places = await Place.find({creator: userId}); //findById doesn't return a promise, we can use try-catch
+  } catch (error) {
+    return next(
+      new HttpError("Somthing went wrong, could not find a place", 500)
+    );
+  }
 
-  if (!Object.keys(userPlaces).length) {
-    //checks the length of userPlace object
+  if (!Object.keys(places).length) {
+    //checks the length of Places object
     // return res.status(404).json({message: "Could not find a place for the provided userId"})
     // const error = new Error("Could not find a place for the provided userId");
     // error.code = 404;
@@ -99,7 +104,7 @@ const getPlacesByUserId = (req, res, next) => {
     );
   }
 
-  res.json({ userPlaces }); //In js {userPlace} == {userPlace: userPlace}
+  res.json({ places: places.map(p=>p.toObject({getters: true})) }); //In js {userPlace} == {userPlace: userPlace}
 };
 
 const createPlace = async (req, res, next) => {
