@@ -11,7 +11,7 @@ const placeSchema = new Schema({
         lat: {type: Number, required: true},
         lan: {type: Number, required: true}
     },
-    creator: {type: String, required: true},
+    creator: {type: mongoose.Types.ObjectId, required: true, ref: 'User'},
 });
 
 const Place = mongoose.model('Place', placeSchema); //covention is to keep 1st letter capital for 'Place'

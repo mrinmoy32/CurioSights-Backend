@@ -45,7 +45,7 @@ const signup = async (req, res, next) => {
     );
   }
 
-  const { name, email, password,image, places } = req.body;
+  const { name, email, password, image } = req.body;
   // const hasUser = DUMMY_USERS.find((u) => u.email === email);
   // if (hasUser) {
   //   throw new HttpError("User alreay exists", 422);
@@ -77,7 +77,7 @@ const signup = async (req, res, next) => {
     email,
     password,
     image,
-    places,
+    places: []
   });
   // DUMMY_USERS.push(createdUser);
 
