@@ -45,7 +45,7 @@ const signup = async (req, res, next) => {
     );
   }
 
-  const { name, email, password, image } = req.body;
+  const { name, email, password } = req.body;
   // const hasUser = DUMMY_USERS.find((u) => u.email === email);
   // if (hasUser) {
   //   throw new HttpError("User alreay exists", 422);
@@ -76,7 +76,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    image,
+    image: "https://avatars.githubusercontent.com/u/42727681?v=4",
     places: []
   });
   // DUMMY_USERS.push(createdUser);
