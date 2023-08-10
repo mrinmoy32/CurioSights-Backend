@@ -11,7 +11,7 @@ router.post(
   [
     check("name").not().isEmpty(),
     check("email").normalizeEmail() // Test@test.com -> test@test.com
-    .isEmail(), // checks if valid email
+    .isEmail(), // checks if valid email using express validator
     check("password").isLength({ min: 8 }),
     check("places").not().isEmpty(),
   ],

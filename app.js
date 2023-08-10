@@ -3,14 +3,15 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const HttpError = require("./models/http-error");
 
-//Importing placesRoutes, usersRoutes middleware
+//Importing placesRoutes, usersRoutes middlewares
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-//using bodyParser before the placesRoutes, so that it parses any incoming req body
+//using bodyParser before the placesRoutes & usersRoutes, 
+//so that it parses any incoming req body that(req.body) would be used in any of the routes
 //here bodyParser receives json and coverts it to corresponding js
 //data structures like object, array, string, number, boolean then calls next() automatically
 app.use(bodyParser.json());

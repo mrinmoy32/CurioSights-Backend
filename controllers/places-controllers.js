@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const Place = require("../models/place");
 const User = require("../models/user");
@@ -6,60 +6,60 @@ const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("./util/location");
 const mongoose = require("mongoose");
 
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Tirupati Balaji Temple",
-    description: "Most visited indian temple",
-    imageUrl:
-      "https://blog.thomascook.in/wp-content/uploads/2019/11/tirupati-balaji-temple.jpg.jpg",
-    address: "Tirumala, Tirupati, Andhra Pradesh 517501",
-    location: {
-      lat: 13.683272,
-      lng: 79.347245,
-    },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "The Great Wall of China",
-    description: "One of the wonders of the world",
-    imageUrl:
-      "https://images.nationalgeographic.org/image/upload/t_edhub_resource_key_image/v1638892506/EducationHub/photos/the-great-wall-of-china.jpg",
-    address: "Jiankou, Huairou District, China",
-    location: {
-      lat: 40.431908,
-      lng: 116.565291,
-    },
-    creator: "u2",
-  },
-  {
-    id: "p3",
-    title: "Machu Picchu",
-    description: "Ancient Inca city in the Andes",
-    imageUrl:
-      "https://cms.valenciatravelcusco.com/media/images/package/sacred-valley-and-machu-picchu-by-train_Z4e2XgX.jpg",
-    address: "Machu Picchu, Aguas Calientes, Peru",
-    location: {
-      lat: -13.163141,
-      lng: -72.545872,
-    },
-    creator: "u1",
-  },
-  {
-    id: "p4",
-    title: "TajMahal",
-    description: "One of the 7 world wonders",
-    coordinates: {
-      lat: 27.1751,
-      lan: 78.0421,
-    },
-    imageUrl:
-      "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFqJTIwbWFoYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
-    address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
-    creator: "u2",
-  },
-];
+// let DUMMY_PLACES = [
+//   {
+//     id: "p1",
+//     title: "Tirupati Balaji Temple",
+//     description: "Most visited indian temple",
+//     imageUrl:
+//       "https://blog.thomascook.in/wp-content/uploads/2019/11/tirupati-balaji-temple.jpg.jpg",
+//     address: "Tirumala, Tirupati, Andhra Pradesh 517501",
+//     location: {
+//       lat: 13.683272,
+//       lng: 79.347245,
+//     },
+//     creator: "u1",
+//   },
+//   {
+//     id: "p2",
+//     title: "The Great Wall of China",
+//     description: "One of the wonders of the world",
+//     imageUrl:
+//       "https://images.nationalgeographic.org/image/upload/t_edhub_resource_key_image/v1638892506/EducationHub/photos/the-great-wall-of-china.jpg",
+//     address: "Jiankou, Huairou District, China",
+//     location: {
+//       lat: 40.431908,
+//       lng: 116.565291,
+//     },
+//     creator: "u2",
+//   },
+//   {
+//     id: "p3",
+//     title: "Machu Picchu",
+//     description: "Ancient Inca city in the Andes",
+//     imageUrl:
+//       "https://cms.valenciatravelcusco.com/media/images/package/sacred-valley-and-machu-picchu-by-train_Z4e2XgX.jpg",
+//     address: "Machu Picchu, Aguas Calientes, Peru",
+//     location: {
+//       lat: -13.163141,
+//       lng: -72.545872,
+//     },
+//     creator: "u1",
+//   },
+//   {
+//     id: "p4",
+//     title: "TajMahal",
+//     description: "One of the 7 world wonders",
+//     coordinates: {
+//       lat: 27.1751,
+//       lan: 78.0421,
+//     },
+//     imageUrl:
+//       "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGFqJTIwbWFoYWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=600&q=60",
+//     address: "Dharmapuri, Forest Colony, Tajganj, Agra, Uttar Pradesh 282001",
+//     creator: "u2",
+//   },
+// ];
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.placeId; //params provided by express gives us the placeId from req url

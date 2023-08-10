@@ -1,27 +1,27 @@
-const { v4: uuidv4 } = require("uuid");
+// const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
 //dummy userslist data
-const DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "Mrinmoy Pal",
-    image: "https://avatars.githubusercontent.com/u/109314855?v=4",
-    places: 17,
-    email: "test1@yo.com",
-    password: "Test@123",
-  },
-  {
-    id: "u2",
-    name: "Manoj Mahesh",
-    image: "https://avatars.githubusercontent.com/u/42727681?v=4",
-    places: 29,
-    email: "test2@yo.com",
-    password: "Tester321",
-  },
-];
+// const DUMMY_USERS = [
+//   {
+//     id: "u1",
+//     name: "Mrinmoy Pal",
+//     image: "https://avatars.githubusercontent.com/u/109314855?v=4",
+//     places: 17,
+//     email: "test1@yo.com",
+//     password: "Test@123",
+//   },
+//   {
+//     id: "u2",
+//     name: "Manoj Mahesh",
+//     image: "https://avatars.githubusercontent.com/u/42727681?v=4",
+//     places: 29,
+//     email: "test2@yo.com",
+//     password: "Tester321",
+//   },
+// ];
 
 const getUsers = async (req, res, next) => {
   let users;
