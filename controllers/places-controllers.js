@@ -4,7 +4,7 @@ const Place = require("../models/place");
 const User = require("../models/user");
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("./util/location");
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 let DUMMY_PLACES = [
   {
@@ -149,25 +149,27 @@ const createPlace = async (req, res, next) => {
   try {
     user = await User.findById(creator);
   } catch (error) {
-    return next(new HttpError('Creating place failed, user does not exist', 500))
+    return next(
+      new HttpError("Creating place failed, user does not exist", 500)
+    );
   }
 
-  if(!user){
-    const error = new HttpError('could not find user for provided id', 404);
+  if (!user) {
+    const error = new HttpError("could not find user for provided id", 404);
     return next(error);
   }
 
   // DUMMY_PLACES.push(createdPlace);
 
-  //Session & Transaction
+  //Session & Transaction in mongoose
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    await createdPlace.save({session: sess});
+    await createdPlace.save({ session: sess });
     // await createdPlace.save(); //save() will create a new doc in mongo collection, also its a promise
     user.places.push(createdPlace); //here push is not the simple js push, its behind the seen
     //establishes a connection between the 2 Models and only pushes the place id in user doc
-    await user.save();
+    await user.save({ session: sess });
     await sess.commitTransaction();
   } catch (error) {
     console.log(error);
@@ -212,10 +214,10 @@ const updatePlace = async (req, res, next) => {
 
 const deletePlace = async (req, res, next) => {
   const placeId = req.params.placeId;
-  let deletedPlace;
+  let place;
   try {
-    deletedPlace = await Place.findById(placeId);
-    console.log(deletedPlace)
+    place = await Place.findById(placeId).populate("creator"); //populate help us to access doc in other collection, this works with use of ref property in mongoose data Model
+    console.log(place);
   } catch (error) {
     return next(
       new HttpError(
@@ -225,22 +227,37 @@ const deletePlace = async (req, res, next) => {
     );
   }
 
+  if (!place) {
+    const error = ("could not find place for the id", 404);
+    return next(error);
+  }
+  //creating seesion and transaction for deleting place and removing the placeId in user doc
   try {
-    await deletedPlace.deleteOne();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await place.deleteOne({session: sess});
+    place.creator.places.pull(place); //just like push before pull is also mongoose method
+    //pull usee to remove the place id from the places array present in user doc;
+    await place.creator.save({session: sess});
+    await sess.commitTransaction();
+
   } catch (error) {
-    console.log('Received Error:' , error)
+    console.log("Received Error:", error);
     return next(
-      new HttpError("Failed to delete the place, please try again", 500)
+      new HttpError(
+        "Failed to delete the place, please check DB connection",
+        500
+      )
     );
   }
 
-  // if (!deletedPlace) {
+  // if (!place) {
   //   throw new HttpError("could not find a place for that id", 404);
   // }
   // DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
   res.status(200).json({
     message: "successfully deleted place",
-    deletedPlace: deletedPlace.toObject({ getters: true }),
+    place: place.toObject({ getters: true }),
   });
 };
 
