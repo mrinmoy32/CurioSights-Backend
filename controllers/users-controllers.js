@@ -53,7 +53,7 @@ const signup = async (req, res, next) => {
 
   let existingUser;
   try {
-    const existingUser = await User.findOne({ email: email });
+    existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new HttpError(
       "Signing up Failed, please check DB connection",
