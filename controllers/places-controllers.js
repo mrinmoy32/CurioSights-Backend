@@ -1,8 +1,10 @@
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const Place = require("../models/place");
+const User = require("../models/user");
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("./util/location");
+const mongoose = require('mongoose')
 
 let DUMMY_PLACES = [
   {
@@ -142,10 +144,33 @@ const createPlace = async (req, res, next) => {
     address,
     creator,
   });
-  // DUMMY_PLACES.push(createdPlace);
+
+  let user;
   try {
-    await createdPlace.save(); //save() will create a new doc in mongo collection, also its a promise
+    user = await User.findById(creator);
   } catch (error) {
+    return next(new HttpError('Creating place failed, user does not exist', 500))
+  }
+
+  if(!user){
+    const error = new HttpError('could not find user for provided id', 404);
+    return next(error);
+  }
+
+  // DUMMY_PLACES.push(createdPlace);
+
+  //Session & Transaction
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdPlace.save({session: sess});
+    // await createdPlace.save(); //save() will create a new doc in mongo collection, also its a promise
+    user.places.push(createdPlace); //here push is not the simple js push, its behind the seen
+    //establishes a connection between the 2 Models and only pushes the place id in user doc
+    await user.save();
+    await sess.commitTransaction();
+  } catch (error) {
+    console.log(error);
     return next(new HttpError("Failed creating place, please try again", 500));
   }
 
