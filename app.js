@@ -10,11 +10,23 @@ const usersRoutes = require("./routes/users-routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-//using bodyParser before the placesRoutes & usersRoutes, 
+//using bodyParser before the placesRoutes & usersRoutes,
 //so that it parses any incoming req body that(req.body) would be used in any of the routes
 //here bodyParser receives json and coverts it to corresponding js
 //data structures like object, array, string, number, boolean then calls next() automatically
 app.use(bodyParser.json());
+
+//Handling CORS Policy
+app.use((req, res, next) => {
+  //3 headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE')
+  next(); // is used to let the request continue its journey to other middlewares
+});
 
 // Using the placesRoutes middleware in the application
 // the use method only passess requests with starting URL of /api/places/.......
@@ -39,7 +51,9 @@ app.use((error, req, res, next) => {
 
 //conection to DB
 mongoose
-  .connect('mongodb+srv://mrinmoy21pal:EnT6JAOzK5NiKqKi@cluster0.ktyhmsa.mongodb.net/curioplaces?retryWrites=true&w=majority')
+  .connect(
+    "mongodb+srv://mrinmoy21pal:EnT6JAOzK5NiKqKi@cluster0.ktyhmsa.mongodb.net/curioplaces?retryWrites=true&w=majority"
+  )
   .then(() => {
     // Start the server
     app.listen(PORT, () => {
@@ -47,6 +61,6 @@ mongoose
       console.log("Database connection established");
     });
   })
-  .catch((error)=>{
+  .catch((error) => {
     console.log(error);
   });
