@@ -13,7 +13,7 @@ router.post(
     check("email").normalizeEmail() // Test@test.com -> test@test.com
     .isEmail(), // checks if valid email using express validator
     check("password").isLength({ min: 8 }),
-    check("places").not().isEmpty(),
+    // check("places").not().isEmpty(), //not needed as no places needed at signup
   ],
   usersControllers.signup
 );
