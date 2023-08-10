@@ -9,6 +9,8 @@ async function getCoordsForAddress(address) {
   //   lat: 40.7484474,
   //   lng: -73.9871516
   // };
+
+  //The API key is not working as it might got expired. Hence location geocoding is not working
   const response = await axios.get(
     `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
