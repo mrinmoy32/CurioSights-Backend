@@ -120,7 +120,10 @@ const login = async (req, res, next) => {
   // if (!identifiedUser || identifiedUser.password !== password) {
   //   throw new HttpError("No user found for the mail or password", 401);
   // }
-  res.json({ message: "User Logged In", user: existingUser });
+  res.json({
+    message: "User Logged In",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 exports.getUsers = getUsers;
