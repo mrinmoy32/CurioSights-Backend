@@ -77,7 +77,7 @@ const signup = async (req, res, next) => {
     email,
     password,
     image: "https://avatars.githubusercontent.com/u/42727681?v=4",
-    places: []
+    places: [],
   });
   // DUMMY_USERS.push(createdUser);
 
@@ -90,7 +90,7 @@ const signup = async (req, res, next) => {
   }
   res.status(201).json({
     message: "New user added",
-    createdUser: createdUser.toObject({ getters: true }),
+    user: createdUser.toObject({ getters: true }),
   });
 };
 
@@ -120,7 +120,7 @@ const login = async (req, res, next) => {
   // if (!identifiedUser || identifiedUser.password !== password) {
   //   throw new HttpError("No user found for the mail or password", 401);
   // }
-  res.json({ message: "User Logged In", existingUser });
+  res.json({ message: "User Logged In", user: existingUser });
 };
 
 exports.getUsers = getUsers;
