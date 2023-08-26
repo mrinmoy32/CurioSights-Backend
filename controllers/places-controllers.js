@@ -134,13 +134,13 @@ const createPlace = async (req, res, next) => {
   //   return next(error);
   // }
   //using data model Place
+  console.log(req);
   const createdPlace = new Place({
     // id: placeId,
     title,
     description,
     location: coordinates,
-    image:
-      "https://cms.valenciatravelcusco.com/media/images/package/sacred-valley-and-machu-picchu-by-train_Z4e2XgX.jpg",
+    image: req.file.path,
     address,
     creator,
   });
