@@ -1,4 +1,5 @@
 // const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 const { validationResult } = require("express-validator");
 const Place = require("../models/place");
 const User = require("../models/user");
@@ -231,15 +232,17 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
   //creating seesion and transaction for deleting place and removing the placeId in user doc
+
+  const imagePath = place.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    await place.deleteOne({session: sess});
+    await place.deleteOne({ session: sess });
     place.creator.places.pull(place); //just like push before pull is also mongoose method
     //pull usee to remove the place id from the places array present in user doc;
-    await place.creator.save({session: sess});
+    await place.creator.save({ session: sess });
     await sess.commitTransaction();
-
   } catch (error) {
     console.log("Received Error:", error);
     return next(
@@ -249,6 +252,8 @@ const deletePlace = async (req, res, next) => {
       )
     );
   }
+
+  fs.unlink(imagePath, (err) => console.log(err));
 
   // if (!place) {
   //   throw new HttpError("could not find a place for that id", 404);
