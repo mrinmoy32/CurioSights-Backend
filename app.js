@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -16,6 +17,9 @@ const PORT = process.env.PORT || 5000;
 //here bodyParser receives json and coverts it to corresponding js
 //data structures like object, array, string, number, boolean then calls next() automatically
 app.use(bodyParser.json());
+
+//to server images statically & handle /uploads/images routes
+app.use('/uploads/images', express.static(path.join('uploads','images')))
 
 //Handling CORS Policy
 app.use((req, res, next) => {
