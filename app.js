@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -41,6 +42,11 @@ app.use((req, res, next) => {
 
 //middleware for Error Handler
 app.use((error, req, res, next) => {
+  if(req.file){
+    fs.unlink(req.file.path, (err) => { //delete received file if error
+      console.log(err);
+    });
+  } //multer adds file property to the request if we do have a file
   if (res.headerSent) {
     return next(error); //we can use "throw error" in synchronus
     //and use next(error) in both sychronous and asynchronous both cases

@@ -76,7 +76,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password,
-    image: "https://avatars.githubusercontent.com/u/42727681?v=4",
+    image: req.file.path,
     places: [],
   });
   // DUMMY_USERS.push(createdUser);
