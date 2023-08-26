@@ -134,7 +134,6 @@ const createPlace = async (req, res, next) => {
   //   return next(error);
   // }
   //using data model Place
-  console.log(req);
   const createdPlace = new Place({
     // id: placeId,
     title,
