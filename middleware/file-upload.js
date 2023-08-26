@@ -20,7 +20,12 @@ const fileUpload = multer({
       cb(null, uuid() + "." + ext); // this generates random filename with correct extension
     },
   }),
-  
+  fileFilter: (req, file, cb) => {
+    const isValid = !!MIME_TYPE_MAP[file.mimetype]; //!! coverts it to false if MIME_TYPE is undefined else true
+    let error = isValid ? null : new Error('Invalid mime type!');
+    cb(error, isValid);
+  } //in FE everything can be hacked or changed by user with Dev Tools, 
+  //so filter & validation is must at the BE also, just like we did for form using express-validator
 });
 
 module.exports = fileUpload;
