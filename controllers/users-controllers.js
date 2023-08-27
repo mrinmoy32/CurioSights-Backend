@@ -1,6 +1,7 @@
 // const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
@@ -98,9 +99,23 @@ const signup = async (req, res, next) => {
     console.log(error);
     return next(new HttpError("Failed adding new user, please try again", 500));
   }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
+      "super*secret-key_dont_share",
+      { expiresIn: "1hr" } // "super*secret-key_dont_share" is the secret key it could be anything
+    );
+  } catch (err) {
+    console.log(error);
+    return next(new HttpError("Failed adding new user, please try again", 500));
+  }
+
   res.status(201).json({
     message: "New user added",
     user: createdUser.toObject({ getters: true }),
+    access_token: token,
   });
 };
 
@@ -132,24 +147,40 @@ const login = async (req, res, next) => {
   // }
 
   let isValidPassword = false;
-try {
-  isValidPassword = await bcrypt.compare(password, existingUser.password)
-} catch (err) {
-  const error = new HttpError('Could not log you in, please check you credentials', 500);
-  return next(error);
-}
+  try {
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
+  } catch (err) {
+    const error = new HttpError(
+      "Could not log you in, please check you credentials",
+      500
+    );
+    return next(error);
+  }
 
-if(!isValidPassword){
-  const error = new HttpError(
-    "Invalid credentials, Could not log you in",
-    422
-  );
-  return next(error);
-}
+  if (!isValidPassword) {
+    const error = new HttpError(
+      "Invalid credentials, Could not log you in",
+      422
+    );
+    return next(error);
+  }
+
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: existingUser.id, email: existingUser.email },
+      "super*secret-key_dont_share",
+      { expiresIn: "1hr" } // "super*secret-key_dont_share" is the secret key it could be anything
+    );
+  } catch (err) {
+    console.log(error);
+    return next(new HttpError("Loging in failed, please try again", 500));
+  }
 
   res.json({
     message: "User Logged In",
     user: existingUser.toObject({ getters: true }),
+    access_token: token,
   });
 };
 
