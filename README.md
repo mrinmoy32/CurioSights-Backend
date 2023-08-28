@@ -44,6 +44,25 @@ CurioSights-Backend provides the following API endpoints:
 
 Make sure to refer to the API documentation or codebase for detailed information about request and response structures.
 
+## Dependencies
+
+The project utilizes the following dependencies:
+
+- [axios](https://www.npmjs.com/package/axios) - Promise-based HTTP client for making requests to external APIs.
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Library for hashing and salting passwords.
+- [body-parser](https://www.npmjs.com/package/body-parser) - Middleware for parsing incoming request bodies.
+- [express](https://www.npmjs.com/package/express) - Fast and minimalist web framework for Node.js.
+- [express-validator](https://www.npmjs.com/package/express-validator) - Middleware for validating incoming request data.
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - Implementation of JSON Web Tokens (JWT) for user authentication.
+- [mongoose](https://www.npmjs.com/package/mongoose) - Object Data Modeling (ODM) library for MongoDB and Node.js.
+- [mongoose-unique-validator](https://www.npmjs.com/package/mongoose-unique-validator) - Plugin for Mongoose that adds validation for unique fields.
+- [multer](https://www.npmjs.com/package/multer) - Middleware for handling file uploads.
+- [uuid](https://www.npmjs.com/package/uuid) - Library for generating universally unique identifiers (UUIDs).
+
+**Dev Dependencies:**
+
+- [nodemon](https://www.npmjs.com/package/nodemon) - Utility that monitors for changes and automatically restarts the server.
+
 ## Configuration
 
 CurioSights-Backend uses the following environment variables for configuration:
@@ -74,3 +93,4 @@ CurioSights-Backend is licensed under the ISC License. For more details, see the
 If you have any questions or concerns, feel free to open an issue on the [GitHub repository](https://github.com/mrinmoy32/CurioSights-Backend/issues).
 
 Visit the [CurioSights-Backend GitHub repository](https://github.com/mrinmoy32/CurioSights-Backend) for more information and updates.
+
