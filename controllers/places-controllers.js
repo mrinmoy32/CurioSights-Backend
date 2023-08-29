@@ -196,6 +196,10 @@ const updatePlace = async (req, res, next) => {
     return next(new HttpError("Failed updating place, please try again", 500));
   }
 
+  if(place.creator.toString() !== req.useData.userId){
+    return next(new HttpError("Failed updating place, user not authorized to update", 401));
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
 
