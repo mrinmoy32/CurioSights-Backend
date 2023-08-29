@@ -3,6 +3,7 @@
         "DB_USER": "mrinmoy21pal",
         "DB_PASSWORD": "EnT6JAOzK5NiKqKi",
         "DB_NAME": "curioplaces",
-        "GOOGLE_GEOCODE_API_KEY": "AIzaSyDgLmMpKCzveJf1_yuA0fUzzhy0WRChvZA"
+        "GOOGLE_GEOCODE_API_KEY": "AIzaSyDgLmMpKCzveJf1_yuA0fUzzhy0WRChvZA",
+        "JWT_KEY": "super*secret-key_dont_share"
     }
 }
