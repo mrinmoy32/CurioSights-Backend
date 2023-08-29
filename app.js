@@ -62,7 +62,7 @@ app.use((error, req, res, next) => {
 //conection to DB
 mongoose
   .connect(
-    "mongodb+srv://mrinmoy21pal:EnT6JAOzK5NiKqKi@cluster0.ktyhmsa.mongodb.net/curioplaces?retryWrites=true&w=majority"
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.ktyhmsa.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
   )
   .then(() => {
     // Start the server
