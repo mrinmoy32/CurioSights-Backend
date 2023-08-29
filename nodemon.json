@@ -2,6 +2,6 @@
     "env": {
         "DB_USER": "mrinmoy21pal",
         "DB_PASSWORD": "EnT6JAOzK5NiKqKi",
-        "DB_NAME": "curioplaces"
+        "DB_NAME": "curioplaces"    
     }
 }
