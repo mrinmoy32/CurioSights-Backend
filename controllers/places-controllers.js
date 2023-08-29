@@ -122,7 +122,7 @@ const createPlace = async (req, res, next) => {
     );
   }
 
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
   // const placeId = uuidv4(); //not needed anyomore as DB will generate ID
   //creating a obj literal. below for every prop like title it means title:title as the names are same
   //for location name is differnet so we are using coordinates as value.
@@ -142,7 +142,7 @@ const createPlace = async (req, res, next) => {
     location: coordinates,
     image: req.file.path,
     address,
-    creator,
+    creator: req.userData.userId
   });
 
   let user;
