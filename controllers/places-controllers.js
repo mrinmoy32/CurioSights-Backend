@@ -237,6 +237,10 @@ const deletePlace = async (req, res, next) => {
   }
   //creating seesion and transaction for deleting place and removing the placeId in user doc
 
+  if(place.creator.id !== req.useData.userId){
+    return next(new HttpError("Failed deleting place, user not authorized to delete", 401));
+  }
+
   const imagePath = place.image;
 
   try {
