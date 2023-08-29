@@ -11,8 +11,8 @@
 # production
 /build
 
-#uploads
-/uploads
+# #uploads
+# /uploads
 
 # misc
 .DS_Store
