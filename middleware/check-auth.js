@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   } catch (err) {
     const error = new HttpError(
       "Authentication failed, no token received",
-      401
+      403
     );
     return next(error);
   }
