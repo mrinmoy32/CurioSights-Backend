@@ -4,6 +4,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const HttpError = require("./models/http-error");
+// Import the dotenv package
+const dotenv = require('dotenv');
+
+// Load environment variables from nodemon.json
+dotenv.config({
+  path: 'nodemon.json'
+});
 
 //Importing placesRoutes, usersRoutes middlewares
 const placesRoutes = require("./routes/places-routes");
