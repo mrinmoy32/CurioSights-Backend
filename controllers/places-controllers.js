@@ -127,7 +127,9 @@ const createPlace = async (req, res, next) => {
   //creating a obj literal. below for every prop like title it means title:title as the names are same
   //for location name is differnet so we are using coordinates as value.
 
-  //using getCoordsForAddress BUT IT IS NOT WORKINGMAY BE DUE TO API
+  const convertedAddress= address.split(" ").join("%20");
+  
+  //using getCoordsForAddress BUT IT IS NOT WORKING MAY BE DUE TO API
   let coordinates = { lat: 27, lan: 30 }; //Using dummy-coordinates
   // try {
   //   // coordinates = await getCoordsForAddress(address);

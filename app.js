@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 5000;
 //data structures like object, array, string, number, boolean then calls next() automatically
 app.use(bodyParser.json());
 
-//to server images statically & handle /uploads/images routes
+//to serve images statically & handle /uploads/images routes
 app.use('/uploads/images', express.static(path.join('uploads','images')))
 
 //Handling CORS Policy
