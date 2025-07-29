@@ -19,6 +19,18 @@ To get started with CurioSights-Backend, follow these steps:
 2. Navigate to the project directory: `cd CurioSights-Backend`
 3. Install the required dependencies: `npm install`
 
+## Env Secrerets
+
+Create a `.env` file in the root folder and paste the following details for you project setup
+
+```
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+GOOGLE_GEOCODE_API_KEY=
+JWT_KEY=
+```
+
 ## Usage
 
 To run the CurioSights-Backend server, execute the following command:
